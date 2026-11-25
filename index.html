@@ -1,0 +1,309 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<div id="loginPage" class="login-page">
+    <div class="login-box">
+        <div class="logo">🎓</div>
+        <h1>EduManage</h1>
+        <p>School Management System</p>
+
+        <form id="loginForm">
+            <label>Email Address</label>
+            <input type="email" id="email" placeholder="Enter email" required>
+
+            <label>Password</label>
+            <input type="password" id="password" placeholder="Enter password" required>
+
+            <label>Login As</label>
+            <select id="role">
+                <option value="student">Student</option>
+                <option value="admin">Admin</option>
+            </select>
+
+            <button type="submit" class="primary-btn">Login</button>
+            <p id="loginError" class="error"></p>
+        </form>
+
+        <div class="demo-info">
+            <b>Demo Login</b><br>
+            Admin: admin@school.com / admin123<br>
+            Student: student@school.com / student123
+        </div>
+    </div>
+</div>
+
+<!-- MAIN APPLICATION -->
+<div id="app" class="app hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand">🎓 EduManage</div>
+
+        <div class="user-info">
+            <div class="avatar" id="userAvatar">A</div>
+            <div>
+                <h3 id="userName">User</h3>
+                <small id="userRole">Student</small>
+            </div>
+        </div>
+
+        <nav id="navigation">
+            <button class="nav-link active" data-page="dashboard">🏠 Dashboard</button>
+            <button class="nav-link admin-only" data-page="students">👨‍🎓 Students</button>
+            <button class="nav-link admin-only" data-page="teachers">👩‍🏫 Teachers</button>
+            <button class="nav-link" data-page="attendance">📋 Attendance</button>
+            <button class="nav-link" data-page="timetable">📅 Timetable</button>
+            <button class="nav-link" data-page="results">📊 Results</button>
+            <button class="nav-link" data-page="fees">💳 Fees</button>
+            <button class="nav-link" data-page="announcements">📢 Announcements</button>
+            <button class="nav-link" data-page="contact">☎ Contact</button>
+        </nav>
+
+        <button id="logoutBtn" class="logout-btn">↪ Logout</button>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <h2 id="pageTitle">Dashboard</h2>
+                <p>Welcome to your school portal</p>
+            </div>
+            <div class="date" id="currentDate"></div>
+        </header>
+
+        <!-- DASHBOARD -->
+        <section id="dashboard" class="page active-page">
+            <div class="welcome-card">
+                <div>
+                    <h2>Welcome Back! 👋</h2>
+                    <p>Manage your school activities in one place.</p>
+                </div>
+                <div class="welcome-icon">🏫</div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span>👨‍🎓</span>
+                    <p>Total Students</p>
+                    <h2 id="studentCount">0</h2>
+                </div>
+                <div class="stat-card">
+                    <span>👩‍🏫</span>
+                    <p>Total Teachers</p>
+                    <h2 id="teacherCount">0</h2>
+                </div>
+                <div class="stat-card">
+                    <span>📋</span>
+                    <p>Present Today</p>
+                    <h2 id="presentCount">0</h2>
+                </div>
+                <div class="stat-card">
+                    <span>💰</span>
+                    <p>Fees Collected</p>
+                    <h2 id="feeCount">₹0</h2>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3>Recent Announcements</h3>
+                <div id="dashboardAnnouncements"></div>
+            </div>
+
+            <div class="content-card">
+                <h3>Quick Information</h3>
+                <p>Use the sidebar to access school management features.</p>
+            </div>
+        </section>
+
+        <!-- STUDENTS -->
+        <section id="students" class="page">
+            <div class="section-heading">
+                <h3>Student Management</h3>
+                <button class="primary-btn admin-only" id="addStudentBtn">+ Add Student</button>
+            </div>
+
+            <div class="content-card">
+                <input type="text" id="studentSearch" placeholder="Search students..." class="search-box">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Class</th>
+                                <th>Email</th>
+                                <th class="admin-only">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TEACHERS -->
+        <section id="teachers" class="page">
+            <h3>Teacher Management</h3>
+            <div class="content-card">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Teacher Name</th>
+                                <th>Subject</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teacherTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ATTENDANCE -->
+        <section id="attendance" class="page">
+            <h3>Attendance Management</h3>
+            <div class="content-card">
+                <p>Mark student attendance for today.</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Class</th>
+                                <th>Attendance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendanceTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TIMETABLE -->
+        <section id="timetable" class="page">
+            <h3>Class Timetable</h3>
+            <div class="content-card table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Day</th>
+                            <th>9:00 - 10:00</th>
+                            <th>10:00 - 11:00</th>
+                            <th>11:15 - 12:15</th>
+                            <th>1:00 - 2:00</th>
+                        </tr>
+                    </thead>
+                    <tbody id="timetableTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- RESULTS -->
+        <section id="results" class="page">
+            <h3>Examination Results</h3>
+            <div class="content-card table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Mathematics</th>
+                            <th>Science</th>
+                            <th>English</th>
+                            <th>Total</th>
+                            <th>Result</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- FEES -->
+        <section id="fees" class="page">
+            <h3>Fee Management</h3>
+            <div class="content-card table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Amount</th>
+                            <th>Payment Status</th>
+                            <th class="admin-only">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="feeTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ANNOUNCEMENTS -->
+        <section id="announcements" class="page">
+            <div class="section-heading">
+                <h3>School Announcements</h3>
+                <button class="primary-btn admin-only" id="addAnnouncementBtn">+ Add Announcement</button>
+            </div>
+            <div id="announcementList"></div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="page">
+            <h3>Contact School</h3>
+            <div class="content-card">
+                <p>🏫 EduManage School</p>
+                <p>📍 Coimbatore, Tamil Nadu</p>
+                <p>📧 school@example.com</p>
+                <p>☎ +91 98765 43210</p>
+
+                <form id="contactForm">
+                    <label>Your Name</label>
+                    <input type="text" id="contactName" required>
+
+                    <label>Message</label>
+                    <textarea id="contactMessage" required></textarea>
+
+                    <button class="primary-btn">Send Message</button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<!-- ADD STUDENT MODAL -->
+<div id="studentModal" class="modal hidden">
+    <div class="modal-box">
+        <button class="close-btn" id="closeStudentModal">×</button>
+        <h2>Add New Student</h2>
+
+        <form id="studentForm">
+            <label>Student Name</label>
+            <input id="newStudentName" required>
+
+            <label>Class</label>
+            <input id="newStudentClass" placeholder="Example: 10A" required>
+
+            <label>Email</label>
+            <input type="email" id="newStudentEmail" required>
+
+            <button class="primary-btn">Save Student</button>
+        </form>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
